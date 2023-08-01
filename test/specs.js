@@ -1,13 +1,16 @@
 var fs = require('fs');
 
 var expect = require('expect.js');
-var btoa = require('btoa');
 var jimp = require('jimp-compact');
 var assert = require('assert');
 
 var svg2img = require('../index');
 var Image64 = require('node-base64-image');
 var util = require('util');
+
+var btoa = function (a) {
+    return Buffer.from(a).toString('base64');
+};
 
 describe('Convert SVG', function () {
     it('convert a svg file to png', function (done) {

@@ -1,10 +1,13 @@
 var fs = require('fs');
-var atob = require('atob');
 var http = require('http');
 var https = require('https');
 
 var jimp = require('jimp-compact');
 var { Resvg } = require('@resvg/resvg-js');
+
+var atob = function (a) {
+    return Buffer.from(a, 'base64').toString('binary');
+};
 
 /**
  * Main method
