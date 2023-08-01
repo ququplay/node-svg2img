@@ -1,9 +1,8 @@
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
-
-//var jimp = require('jimp-compact');
-var { Resvg } = require('@resvg/resvg-js');
+var { Resvg, initWasm } = require('@resvg/resvg-wasm');
+var resvgwasm = require('./index_bg.wasm');
 
 var atob = function (a) {
     return Buffer.from(a, 'base64').toString('binary');
@@ -37,36 +36,25 @@ function svg2img(svg, options, callback) {
         options.quality = options.quality ? parseInt(options.quality, 10) : 75;
         options.format = options.format ? options.format.toLowerCase() : 'png';
 
-        var isJpg = options.format === 'jpg' || options.format === 'jpeg';
+        // var isJpg = options.format === 'jpg' || options.format === 'jpeg';
 
         var imgBuffer;
         var pngData;
         try {
             // Set the default background color of jpg to white, otherwise it is black.
-            if (isJpg) {
-                options.resvg.background = '#fff';
-            }
-            var resvg = new Resvg(content, options.resvg);
+            // if (isJpg) {
+            //     options.resvg.background = '#fff';
+            // }
+
+            await initWasm(resvgwasm);
+
+            var resvg = new Resvg(content,options.resvg);
+
             pngData = resvg.render();
             imgBuffer = pngData.asPng()
         } catch (error) {
             callback(error);
         }
-//
-//         if (isJpg) {
-//             try {
-//                 // Convert png to jpg using jimp.
-//                 // resvg-js does not currently support generating jpg buffer.
-//                 var pngBuffer = pngData.asPng();
-//                 var image = await jimp.read(pngBuffer);
-//                 await image.quality(options.quality);
-//                 imgBuffer = await image.getBufferAsync(jimp.MIME_JPEG);
-//             } catch (error) {
-//                 callback(error);
-//             }
-//         } else {
-//             imgBuffer = pngData.asPng();
-//         }
 
         callback(null, imgBuffer);
     });
