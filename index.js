@@ -2,7 +2,7 @@ var fs = require('fs');
 var http = require('http');
 var https = require('https');
 
-var jimp = require('jimp-compact');
+//var jimp = require('jimp-compact');
 var { Resvg } = require('@resvg/resvg-js');
 
 var atob = function (a) {
@@ -48,24 +48,25 @@ function svg2img(svg, options, callback) {
             }
             var resvg = new Resvg(content, options.resvg);
             pngData = resvg.render();
+            imgBuffer = pngData.asPng()
         } catch (error) {
             callback(error);
         }
-
-        if (isJpg) {
-            try {
-                // Convert png to jpg using jimp.
-                // resvg-js does not currently support generating jpg buffer.
-                var pngBuffer = pngData.asPng();
-                var image = await jimp.read(pngBuffer);
-                await image.quality(options.quality);
-                imgBuffer = await image.getBufferAsync(jimp.MIME_JPEG);
-            } catch (error) {
-                callback(error);
-            }
-        } else {
-            imgBuffer = pngData.asPng();
-        }
+//
+//         if (isJpg) {
+//             try {
+//                 // Convert png to jpg using jimp.
+//                 // resvg-js does not currently support generating jpg buffer.
+//                 var pngBuffer = pngData.asPng();
+//                 var image = await jimp.read(pngBuffer);
+//                 await image.quality(options.quality);
+//                 imgBuffer = await image.getBufferAsync(jimp.MIME_JPEG);
+//             } catch (error) {
+//                 callback(error);
+//             }
+//         } else {
+//             imgBuffer = pngData.asPng();
+//         }
 
         callback(null, imgBuffer);
     });

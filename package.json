@@ -21,8 +21,7 @@
     "node-base64-image": "^1.0.7"
   },
   "dependencies": {
-    "@resvg/resvg-js": "^2.1.0",
-    "jimp-compact": "^0.16.1-2"
+    "@resvg/resvg-js": "^2.1.0"
   },
   "engines": {
     "node": ">= 10"
